@@ -1,5 +1,9 @@
 class Persona
 
+  def self.de_clase
+    puts 'Este es un metodo de clase definido en Persona'
+  end
+
   def hacer_algo
     puts 'Haciendo algo'
   end
