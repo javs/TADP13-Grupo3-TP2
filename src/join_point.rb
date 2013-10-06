@@ -1,6 +1,14 @@
 class JoinPoint
 
-  # "PRIVATE"
+  def metodos
+    matched_hash.values.reduce(Array.new) {| all, matched | all | matched }
+  end
+
+  def clases
+    ObjectSpace.each_object(Class)
+  end
+
+  private
 
   def matched_hash
     hash = Hash.new
@@ -9,17 +17,7 @@ class JoinPoint
   end
 
   def metodos_de_clase(clazz)
-    clazz.instance_methods(true)
-  end
-
-  # "PUBLIC"
-
-  def metodos
-    matched_hash.values.reduce(Array.new) {| all, matched | all | matched}
-  end
-
-  def clases
-    ObjectSpace.each_object(Class)
+    clazz.instance_methods(true).collect { |method| clazz.instance_method(method) }
   end
 
 end
@@ -35,10 +33,10 @@ class JoinPointExpresionRegular < JoinPoint
   end
 
   def clases
-    super.find_all {| clazz | criteria.call clazz }
+    super.find_all {| clazz | criteria(clazz) }
   end
 
-  def criteria
+  def criteria(clazz)
     raise 'SubclassResponsability'
   end
 
@@ -46,29 +44,25 @@ end
 
 class JoinPointNombreClase < JoinPointExpresionRegular
 
-  def criteria
-    Proc.new { | clazz |
-      if @regex =~ clazz.name
-        true
-      else
-        false
-      end
-    }
+  def criteria(clazz)
+    if clazz.name =~ regex
+      true
+    else
+      false
+    end
   end
 
 end
 
 class JoinPointNombreMetodo < JoinPointExpresionRegular
 
-  def criteria
-    Proc.new { | clazz |
+  def criteria(clazz)
       not metodos_de_clase(clazz).empty?
-    }
   end
 
   def metodos_de_clase(clazz)
     super.find_all { | method |
-      regex =~ method
+       method.name =~ regex
     }
   end
 
