@@ -1,26 +1,22 @@
 class JoinPoint
+  def filtra_metodo?(clase, metodo)
+    raise :subclass_responsibility
+  end
+end
 
-  def metodos
-    matched_hash.values.reduce(Array.new) {| all, matched | all | matched }
+class JoinPointClasesEspecificas < JoinPoint
+
+  def initialize(*clases)
+    @clases = clases
   end
 
-  def clases
-    ObjectSpace.each_object(Class)
-  end
-
-  private
-
-  def matched_hash
-    hash = Hash.new
-    clases.each { | clazz | hash[clazz] = metodos_de_clase(clazz) }
-    hash
-  end
-
-  def metodos_de_clase(clazz)
-    clazz.instance_methods(true).collect { |method| clazz.instance_method(method) }
+  def filtra_metodo?(clase, metodo)
+    @clases.include? clase
   end
 
 end
+
+# migrar -------
 
 class JoinPointExpresionRegular < JoinPoint
 
@@ -37,7 +33,7 @@ class JoinPointExpresionRegular < JoinPoint
   end
 
   def criteria(clazz)
-    raise 'SubclassResponsability'
+    raise :subclass_responsibility
   end
 
 end
@@ -68,14 +64,3 @@ class JoinPointNombreMetodo < JoinPointExpresionRegular
 
 end
 
-class JoinPointClasesEspecificas < JoinPoint
-
-  def initialize(*clases)
-    @clases = clases
-  end
-
-  def clases
-    @clases
-  end
-
-end

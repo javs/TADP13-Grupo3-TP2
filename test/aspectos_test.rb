@@ -1,6 +1,6 @@
 require 'test/unit'
 require '../src/join_point'
-require '../test/clases_a_aspectar'
+require '../test/fixture'
 
 class AspectosTest < Test::Unit::TestCase
 
