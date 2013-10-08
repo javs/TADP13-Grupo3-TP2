@@ -31,7 +31,7 @@ end
 
 class OperadorNo < OperadorUnario
   def filtra_metodo?(a, b)
-    ! @op.filtra_metodo?(a, b)
+    not @op.filtra_metodo?(a, b)
   end
 end
 
