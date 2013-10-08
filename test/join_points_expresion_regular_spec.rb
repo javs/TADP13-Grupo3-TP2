@@ -24,11 +24,11 @@ describe JoinPointExpresionRegular do
     j = JoinPointNombreMetodo.new(/algo_malo/)
     j.filtra_metodo?(PersonaMala, PersonaMala.instance_method(:hacer_algo_malo)).should == true
 
-    j = JoinPointNombreMetodo.new(/^hacer_\w+$/)
+    j = JoinPointNombreMetodo.new(/^hacer_[a-z]{4}$/)
     j.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo)).should == true
     j.filtra_metodo?(OtraPersona, OtraPersona.instance_method(:hacer_algo)).should == true
 
-    j = JoinPointNombreMetodo.new(/v\w{4}/)
+    j = JoinPointNombreMetodo.new(/v\w+/)
     j.filtra_metodo?(Linyera, Linyera.instance_method(:vagar)).should == true
   end
 
@@ -47,11 +47,11 @@ describe JoinPointExpresionRegular do
     j = JoinPointNombreMetodo.new(/algo_malo/)
     j.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo)).should == false
 
-    j = JoinPointNombreClase.new(/^hacer_\w+$/)
+    j = JoinPointNombreMetodo.new(/^hacer_[a-z]{4}$/)
     j.filtra_metodo?(PersonaMala, PersonaMala.instance_method(:hacer_algo_malo)).should == false
     j.filtra_metodo?(OtraPersona, OtraPersona.instance_method(:hacer_algo_de_una_forma)).should == false
 
-    j = JoinPointNombreClase.new(/v\w{4}/)
+    j = JoinPointNombreMetodo.new(/v\w+/)
     j.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo)).should == false
     j.filtra_metodo?(PersonaMala, PersonaMala.instance_method(:hacer_algo_malo)).should == false
   end
