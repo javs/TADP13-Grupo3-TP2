@@ -1,4 +1,8 @@
+require_relative 'operadores'
+
 class JoinPoint
+  include Operable
+
   def filtra_metodo?(clase, metodo)
     raise :subclass_responsibility
   end

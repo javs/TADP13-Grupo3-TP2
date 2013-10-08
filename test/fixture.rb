@@ -25,3 +25,9 @@ class OtraPersona < Persona
   end
 
 end
+
+class Linyera < Persona
+  def vagar
+    puts 'zzzz'
+  end
+end

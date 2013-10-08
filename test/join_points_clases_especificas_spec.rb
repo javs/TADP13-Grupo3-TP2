@@ -1,11 +1,11 @@
 require 'rspec'
 
 require_relative '../src/join_point'
-require_relative '../test/fixture'
+require_relative 'fixture'
 
 describe JoinPointClasesEspecificas do
 
-  it 'soportar una clase especifica' do
+  it 'debe soportar una clase especifica' do
     j = JoinPointClasesEspecificas.new(String)
 
     j.filtra_metodo?(String, String.instance_method(:to_s)).should == true
