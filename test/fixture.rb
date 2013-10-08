@@ -8,6 +8,10 @@ class Persona
     puts 'Haciendo algo'
   end
 
+  def hacer_algo_de_una_forma(forma)
+    puts "Haciendo algo de la forma: #{forma}"
+  end
+
 end
 
 class PersonaMala < Persona

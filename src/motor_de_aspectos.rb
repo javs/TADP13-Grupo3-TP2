@@ -2,19 +2,20 @@ require_relative 'join_point'
 
 class MotorDeAspectos
   def aspecto(point_cut, advice)
-    a_modificar = todos_los_metodos.select do |clase, metodo|
-      point_cut.filtra_metodo?(clase, metodo)
+    a_modificar = []
+    todos_los_metodos.each do |clase, metodos|
+      metodos.each do |metodo|
+        a_modificar.push(metodo) if point_cut.filtra_metodo?(clase, metodo)
+      end
     end
 
     # Parte 2
     # a_modificar.each { |clase, metodo| advice.modificar(clase, metodo) }
   end
 
-  private
+ private
 
   def todos_los_metodos
-    return @todos if not @todos.nil?
-
     @todos = Hash.new
 
     ObjectSpace.each_object(Class) do |c|

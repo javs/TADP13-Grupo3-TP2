@@ -4,7 +4,7 @@ class JoinPoint
   include Operable
 
   def filtra_metodo?(clase, metodo)
-    raise :subclass_responsibility
+    raise 'subclass_responsibility'
   end
 end
 
@@ -20,51 +20,53 @@ class JoinPointClasesEspecificas < JoinPoint
 
 end
 
-# migrar -------
-
 class JoinPointExpresionRegular < JoinPoint
+
+  attr_reader :regex
 
   def initialize(regex)
     @regex = regex
   end
 
-  def regex
-    @regex
+  def criteria(clase,metodo)
+    raise 'subclass_responsibility'
   end
 
-  def clases
-    super.find_all {| clazz | criteria(clazz) }
-  end
-
-  def criteria(clazz)
-    raise :subclass_responsibility
+  def filtra_metodo?(clase,metodo)
+    self.criteria(clase,metodo)
   end
 
 end
 
 class JoinPointNombreClase < JoinPointExpresionRegular
 
-  def criteria(clazz)
-    if clazz.name =~ regex
-      true
-    else
-      false
-    end
+  def criteria(clase,metodo)
+    return false unless clase.name =~ regex
+    true
   end
 
 end
 
 class JoinPointNombreMetodo < JoinPointExpresionRegular
 
-  def criteria(clazz)
-      not metodos_de_clase(clazz).empty?
-  end
-
-  def metodos_de_clase(clazz)
-    super.find_all { | method |
-       method.name =~ regex
-    }
+  def criteria(clase,metodo)
+    return false unless metodo.name =~ regex
+    true
   end
 
 end
 
+class JoinPointAridadMetodo < JoinPoint
+  attr_reader :requeridos
+
+  def initialize(requeridos)
+    @requeridos = requeridos
+  end
+
+  def filtra_metodo?(clase,metodo)
+    aridad = metodo.arity
+    aridad += 1 if aridad < 0
+    aridad.abs == requeridos
+  end
+
+end
