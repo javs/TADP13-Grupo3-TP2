@@ -72,7 +72,7 @@ class JoinPointAridadMetodo < JoinPoint
 
 end
 
-class JoinPointJerarquiaDeClase
+class JoinPointJerarquiaDeClase < JoinPoint
 
   attr_reader :superclase
 
