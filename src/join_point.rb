@@ -57,6 +57,7 @@ class JoinPointNombreMetodo < JoinPointExpresionRegular
 end
 
 class JoinPointAridadMetodo < JoinPoint
+
   attr_reader :requeridos
 
   def initialize(requeridos)
@@ -67,6 +68,20 @@ class JoinPointAridadMetodo < JoinPoint
     aridad = metodo.arity
     aridad += 1 if aridad < 0
     aridad.abs == requeridos
+  end
+
+end
+
+class JoinPointJerarquiaDeClase
+
+  attr_reader :superclase
+
+  def initialize(clase)
+    @superclase = clase
+  end
+
+  def filtra_metodo?(clase,metodo)
+    clase.ancestors.include? superclase
   end
 
 end
