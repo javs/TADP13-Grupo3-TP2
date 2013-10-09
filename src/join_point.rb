@@ -28,19 +28,15 @@ class JoinPointExpresionRegular < JoinPoint
     @regex = regex
   end
 
-  def criteria(clase,metodo)
-    raise 'subclass_responsibility'
-  end
-
   def filtra_metodo?(clase,metodo)
-    self.criteria(clase,metodo)
+    raise 'subclass_responsibility'
   end
 
 end
 
 class JoinPointNombreClase < JoinPointExpresionRegular
 
-  def criteria(clase,metodo)
+  def filtra_metodo?(clase,metodo)
     return false unless clase.name =~ regex
     true
   end
@@ -49,7 +45,7 @@ end
 
 class JoinPointNombreMetodo < JoinPointExpresionRegular
 
-  def criteria(clase,metodo)
+  def filtra_metodo?(clase,metodo)
     return false unless metodo.name =~ regex
     true
   end
