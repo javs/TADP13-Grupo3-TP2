@@ -81,3 +81,25 @@ class JoinPointJerarquiaDeClase < JoinPoint
   end
 
 end
+
+
+
+class JoinPointParametrosOpcionales < JoinPoint
+
+  def tiene_parametros_opcionales?(metodo)
+    metodo.arity<0
+  end
+
+  def filtra_metodo?(clase,metodo)
+    self.tiene_parametros_opcionales?(metodo)
+  end
+
+end
+
+class JoinPointNombreParametros < JoinPointExpresionRegular
+
+  def filtra_metodo?(clase,metodo)
+    metodo.parameters.any?{|parametro| parametro[1] =~ regex}
+  end
+
+end

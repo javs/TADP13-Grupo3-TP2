@@ -20,12 +20,20 @@ class PersonaMala < Persona
     puts 'Algo malo'
   end
 
+  def robar(objectos={})
+    puts 'estoy robando objetos'
+  end
+
 end
 
 class OtraPersona < Persona
 
   def hacer_algo
     puts 'Haciendo algo como otra persona'
+  end
+
+  def donar_plata(platita=0)
+    puts 'estoy donando plata'
   end
 
 end
