@@ -103,3 +103,28 @@ class JoinPointNombreParametros < JoinPointExpresionRegular
   end
 
 end
+
+class JoinPointMetodosAccessors < JoinPoint
+  def initialize(clase)
+    setters =  (Persona.instance_methods - Persona.superclass.instance_methods).select{|item| item.to_s =~ /^(\w+)=$/}
+    getters = setters.collect{|item| item.to_s.slice(0..item.to_s.length-2)}
+    puts setters + getters
+    @metodos = (setters + getters).collect{|item| item.to_sym}
+  end
+
+  def filtra_metodo?(clase, metodo)
+    @metodos.include? metodo
+  end
+end
+
+class JoinPointMetodosEspecificos < JoinPoint
+
+  def initialize(*metodos)
+    @metodos = metodos
+  end
+
+  def filtra_metodo?(clase, metodo)
+    @metodos.include? metodo
+  end
+
+end
