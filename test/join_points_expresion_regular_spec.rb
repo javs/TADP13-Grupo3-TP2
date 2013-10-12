@@ -5,10 +5,6 @@ require_relative '../test/fixture'
 
 describe JoinPointExpresionRegular do
 
-  before :each do
-    @clases = Array.new
-  end
-
   it 'debe matchear con una regex un nombre de clase' do
     j = JoinPointNombreClase.new(/Persona/)
     j.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo)).should == true

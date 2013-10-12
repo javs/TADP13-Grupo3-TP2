@@ -88,4 +88,29 @@ describe Operable do
     point_cut.filtra_metodo?(String, String.instance_method(:concat)).should == false
   end
 
+  it 'debe permitir operadores mezclados' do
+    point_cut =
+        JoinPointClasesEspecificas.new(Linyera).y(
+            (JoinPointNombreMetodo.new(/v\w{4}/).no))
+
+    point_cut.filtra_metodo?(Linyera, Linyera.instance_method(:vagar)).should == false
+    point_cut.filtra_metodo?(Linyera, Linyera.instance_method(:hacer_algo)).should == true
+    point_cut.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo)).should == false
+
+    point_cut =
+        JoinPointClasesEspecificas.new(Linyera,Persona).o(
+            (JoinPointAridadMetodo.new(0)).y(
+            JoinPointNombreMetodo.new(/de_/)))
+
+    point_cut.filtra_metodo?(Linyera, Linyera.instance_method(:vagar)).should == true
+    point_cut.filtra_metodo?(Persona, Persona.method(:de_clase)).should == true
+    point_cut.filtra_metodo?(OtraPersona, OtraPersona.method(:de_clase)).should == true
+
+    point_cut.filtra_metodo?(String, String.instance_method(:to_s)).should == false
+    point_cut.filtra_metodo?(PersonaMala, PersonaMala.instance_method(:hacer_algo_malo)).should == false
+    point_cut.filtra_metodo?(OtraPersona, PersonaMala.instance_method(:hacer_algo)).should == false
+    point_cut.filtra_metodo?(String, String.instance_method(:to_s)).should == false
+  end
+
+
 end

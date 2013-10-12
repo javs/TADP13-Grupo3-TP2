@@ -5,10 +5,6 @@ require_relative '../test/fixture'
 
 describe JoinPointNombreParametros do
 
-  before :each do
-    @clases = Array.new
-  end
-
   it 'debe matchear con una regex un parametro' do
     j = JoinPointNombreParametros.new(/orm/)
     j.filtra_metodo?(Persona, Persona.instance_method(:hacer_algo_de_una_forma)).should == true

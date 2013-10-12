@@ -82,16 +82,16 @@ class JoinPointJerarquiaDeClase < JoinPoint
 
 end
 
+class JoinPointTipoDeParametros < JoinPoint
 
+  attr_reader :tipo
 
-class JoinPointParametrosOpcionales < JoinPoint
-
-  def tiene_parametros_opcionales?(metodo)
-    metodo.arity<0
+  def initialize(tipo)
+    @tipo = tipo
   end
 
   def filtra_metodo?(clase,metodo)
-    self.tiene_parametros_opcionales?(metodo)
+    metodo.parameters.any?{|parametro| parametro[0] == tipo}
   end
 
 end
@@ -106,9 +106,8 @@ end
 
 class JoinPointMetodosAccessors < JoinPoint
   def initialize(clase)
-    setters =  (Persona.instance_methods - Persona.superclass.instance_methods).select{|item| item.to_s =~ /^(\w+)=$/}
+    setters =  (clase.instance_methods - clase.superclass.instance_methods).select{|item| item.to_s =~ /^(\w+)=$/}
     getters = setters.collect{|item| item.to_s.slice(0..item.to_s.length-2)}
-    puts setters + getters
     @metodos = (setters + getters).collect{|item| item.to_sym}
   end
 
