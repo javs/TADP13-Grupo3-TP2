@@ -37,8 +37,8 @@ end
 class JoinPointNombreClase < JoinPointExpresionRegular
 
   def filtra_metodo?(clase,metodo)
-    return false unless clase.name =~ regex
-    true
+    return true if clase.name =~ regex
+    false
   end
 
 end
@@ -46,8 +46,8 @@ end
 class JoinPointNombreMetodo < JoinPointExpresionRegular
 
   def filtra_metodo?(clase,metodo)
-    return false unless metodo.name =~ regex
-    true
+    return true if metodo.name =~ regex
+    false
   end
 
 end
