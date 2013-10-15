@@ -44,4 +44,9 @@ class Linyera < Persona
   def vagar
     puts 'zzzz'
   end
+
+  def comprar_ferrari
+    raise 'No puede comprar ferrari'
+  end
+
 end
