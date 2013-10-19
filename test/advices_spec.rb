@@ -23,9 +23,6 @@ describe Advice do
     PersonaMala.new.robar("string")
     puts "---------------------------------------------------------"
 
-    Advice.new(Proc.new { puts "ANTES DE VAGAR" }, Proc.new { puts "DESPUES DE VAGAR" }, Proc.new { puts "ERROR AL VAGAR" }, Proc.new { puts "YA NO VAGA" }).modificar(Linyera, Linyera.instance_method(:vagar))
-    Linyera.new.vagar
-
   end
 
 end

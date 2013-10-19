@@ -1,12 +1,9 @@
 class Advice
 
-  attr_reader :antes, :despues, :error, :enLugarDe
+  attr_accessor :accion
 
-  def initialize(antes=Proc.new {}, despues=Proc.new {}, error=nil, enLugarDe=nil)
-    @antes = antes
-    @despues = despues
-    @error = error
-    @enLugarDe = enLugarDe
+  def initialize(accion)
+    @accion = accion
   end
 
   def modificar(clase, metodo)
@@ -17,59 +14,71 @@ class Advice
         |param|
       param[1].to_s
     }
-    antes = self.antes
-    despues = self.despues
-    error = self.error
-    enLugarDe = self.enLugarDe
+    clase.send :alias_method, simboloOriginal, simbolo
+    self.ejecucionNueva(clase, simbolo, simboloOriginal, *args)
 
-    clase.class_eval do
+  end
 
-      alias_method simboloOriginal, simbolo
-
-      define_method(simbolo) do |*args|
-        antes.call *args
-        begin
-          unless enLugarDe.nil? then enLugarDe.call(*args) else self.send(simboloOriginal, *args) end
-        rescue
-          unless error.nil? then error.call(*args) else raise end
-          end
-        despues.call *args
-      end
-
-    end
-
+  def ejecucionNueva(clase, simbolo, simboloOriginal, *args)
+    raise :subclass_responsability
   end
 
 end
 
 class AdviceAntes < Advice
 
-  def initialize(accion)
-    super(antes=accion)
+  def ejecucionNueva(clase, simbolo, simboloOriginal, *args)
+    accion = self.accion
+    clase.class_eval do
+      define_method(simbolo) do |*args|
+        accion.call *args
+        self.send(simboloOriginal, *args)
+      end
+    end
   end
 
 end
 
 class AdviceDespues < Advice
 
-  def initialize(accion)
-    super(Proc.new{}, despues=accion)
+  def ejecucionNueva(clase, simbolo, simboloOriginal, *args)
+    accion = self.accion
+    clase.class_eval do
+      define_method(simbolo) do |*args|
+        self.send(simboloOriginal, *args)
+        accion.call *args
+      end
+    end
   end
 
 end
 
 class AdviceError < Advice
 
-  def initialize(accion)
-    super(Proc.new{},Proc.new{},error=accion)
+  def ejecucionNueva(clase, simbolo, simboloOriginal, *args)
+    accion = self.accion
+    clase.class_eval do
+      define_method(simbolo) do |*args|
+        begin
+          self.send(simboloOriginal, *args)
+        rescue
+          accion.call *args
+        end
+      end
+    end
   end
 
 end
 
 class AdviceEnLugarDe < Advice
 
-  def initialize(accion)
-    super(Proc.new{},Proc.new{},nil,enLugarDe=accion)
+  def ejecucionNueva(clase, simbolo, simboloOriginal, *args)
+    accion = self.accion
+    clase.class_eval do
+      define_method(simbolo) do |*args|
+        accion.call *args
+      end
+    end
   end
 
 end
