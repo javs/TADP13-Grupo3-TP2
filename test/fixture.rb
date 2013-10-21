@@ -14,6 +14,9 @@ class Persona
     puts "Haciendo algo de la forma: #{forma}"
   end
 
+  def devolver_random
+    rand(1000000)
+  end
 end
 
 class PersonaMala < Persona
