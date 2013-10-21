@@ -11,7 +11,7 @@ class AbstractCache
   def self.advice
     cachearODevolverCacheado = Proc.new {
         |clase, simbolo, simboloOriginal, instancia, *args|
-      invocacion = InvocacionCacheada.new(clase, simbolo, args)
+      invocacion = invocacionCacheada(clase, simbolo, instancia, args)
       invocacion_cacheada = CacheSinEstado.cache.detect {|cached| cached.eql? invocacion}
       unless invocacion_cacheada.nil?
         next invocacion_cacheada.resultado
@@ -25,17 +25,23 @@ class AbstractCache
     AdviceEnLugarDe.new(cachearODevolverCacheado)
   end
 
-
-
-  InvocacionCacheada = Struct.new(:clase, :simbolo, :args, :resultado) do
-    def eql?(other)
-      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args)
-    end
+  def self.invocacionCacheada(clase, simbolo, instancia, args)
+    raise :subclass_responsability
   end
 
 end
 
 class CacheSinEstado < AbstractCache
+
+  InvocacionCacheadaSinEstado = Struct.new(:clase, :simbolo, :args, :resultado) do
+    def eql?(other)
+      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args)
+    end
+  end
+
+  def self.invocacionCacheada(clase, simbolo, instancia, args)
+    InvocacionCacheadaSinEstado.new(clase, simbolo, args)
+  end
 
   def eql?(oneInvocation,anotherInvocation)
 
@@ -44,6 +50,16 @@ class CacheSinEstado < AbstractCache
 end
 
 class CacheConEstado < AbstractCache
+
+  InvocacionCacheadaConEstado = Struct.new(:clase, :simbolo, :instancia, :args, :resultado) do
+    def eql?(other)
+      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args)
+    end
+  end
+
+  def self.invocacionCacheada(clase, simbolo, instancia, args)
+    InvocacionCacheadaConEstado.new(clase, simbolo, instancia, args)
+  end
 
   def eql?(oneInvocation,anotherInvocation)
 
