@@ -1,17 +1,11 @@
 require_relative '../src/advice'
 
-class CacheSinEstado
+class AbstractCache
 
   @@cache = Array.new
 
   def self.cache
     @@cache
-  end
-
-  InvocacionCacheada = Struct.new(:clase, :simbolo, :args, :resultado) do
-    def eql?(other)
-      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args)
-    end
   end
 
   def self.advice
@@ -29,6 +23,30 @@ class CacheSinEstado
       resultado
     }
     AdviceEnLugarDe.new(cachearODevolverCacheado)
+  end
+
+
+
+  InvocacionCacheada = Struct.new(:clase, :simbolo, :args, :resultado) do
+    def eql?(other)
+      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args)
+    end
+  end
+
+end
+
+class CacheSinEstado < AbstractCache
+
+  def eql?(oneInvocation,anotherInvocation)
+
+  end
+
+end
+
+class CacheConEstado < AbstractCache
+
+  def eql?(oneInvocation,anotherInvocation)
+
   end
 
 end
