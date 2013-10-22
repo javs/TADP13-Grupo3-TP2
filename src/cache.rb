@@ -12,7 +12,7 @@ class AbstractCache
     cachearODevolverCacheado = Proc.new {
         |clase, simbolo, simboloOriginal, instancia, *args|
       invocacion = invocacionCacheada(clase, simbolo, instancia, args)
-      invocacion_cacheada = CacheSinEstado.cache.detect {|cached| cached.eql? invocacion}
+      invocacion_cacheada = AbstractCache.cache.detect {|cached| cached.eql? invocacion}
       unless invocacion_cacheada.nil?
         next invocacion_cacheada.resultado
       else
@@ -31,7 +31,7 @@ class AbstractCache
 
 end
 
-class CacheSinEstado < AbstractCache
+class StatelessCache < AbstractCache
 
   InvocacionCacheadaSinEstado = Struct.new(:clase, :simbolo, :args, :resultado) do
     def eql?(other)
@@ -43,13 +43,9 @@ class CacheSinEstado < AbstractCache
     InvocacionCacheadaSinEstado.new(clase, simbolo, args)
   end
 
-  def eql?(oneInvocation,anotherInvocation)
-
-  end
-
 end
 
-class CacheConEstado < AbstractCache
+class StatefulCache < AbstractCache
 
   InvocacionCacheadaConEstado = Struct.new(:clase, :simbolo, :instancia, :args, :resultado) do
     def eql?(other)
@@ -59,10 +55,6 @@ class CacheConEstado < AbstractCache
 
   def self.invocacionCacheada(clase, simbolo, instancia, args)
     InvocacionCacheadaConEstado.new(clase, simbolo, instancia, args)
-  end
-
-  def eql?(oneInvocation,anotherInvocation)
-
   end
 
 end
