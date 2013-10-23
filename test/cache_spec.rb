@@ -15,7 +15,7 @@ describe StatelessCache do
     StatelessCache.cache.length.should == 1
     otraPersona = Persona.new
     cacheado.should == persona.devolver_random
-    StatelessCache.cache.length.should == 2
+    StatelessCache.cache.length.should == 1
   end
 
 end

@@ -47,18 +47,18 @@ end
 
 class StatefulCache < AbstractCache
 
-  InvocacionCacheadaConEstado = Struct.new(:clase, :simbolo, :instancia, :args, :resultado) do
+  InvocacionCacheadaConEstado = Struct.new(:clase, :simbolo, :estado, :args, :resultado) do
     def eql?(other)
-      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args) and (compare_instances?(instancia,other.instancia))
+      (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args) and (compare_estados?(estado,other.estado))
     end
-    def compare_instances?(cacheado, objeto)
-      variablesDeCacheado = cacheado.instance_variables
-      variablesDeObjeto = objeto.instance_variables
+    def compare_estados?(cacheado, objeto)
+      variablesDeCacheado = cacheado.keys
+      variablesDeObjeto = objeto.keys
       diferenciasEntreVariables = (variablesDeCacheado - variablesDeObjeto) and (variablesDeObjeto - variablesDeCacheado)
       if (diferenciasEntreVariables) == []
         variablesDeCacheado.all? {
             |variable|
-          cacheado.instance_variable_get(variable).eql?(objeto.instance_variable_get(variable))
+          cacheado[variable].eql?(objeto[variable])
         }
       else
         false
@@ -67,7 +67,11 @@ class StatefulCache < AbstractCache
   end
 
   def self.invocacionCacheada(clase, simbolo, instancia, args)
-    InvocacionCacheadaConEstado.new(clase, simbolo, instancia, args)
+    estado = Hash.new
+    instancia.instance_variables.each {
+      | variable | estado[variable] = instancia.instance_variable_get(variable)
+    }
+    InvocacionCacheadaConEstado.new(clase, simbolo, estado, args)
   end
 
 end
