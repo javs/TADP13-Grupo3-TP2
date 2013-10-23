@@ -51,24 +51,23 @@ class StatefulCache < AbstractCache
     def eql?(other)
       (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args) and (compare_instances?(instancia,other.instancia))
     end
+    def compare_instances?(cacheado, objeto)
+      variablesDeCacheado = cacheado.instance_variables
+      variablesDeObjeto = objeto.instance_variables
+      diferenciasEntreVariables = (variablesDeCacheado - variablesDeObjeto) and (variablesDeObjeto - variablesDeCacheado)
+      if (diferenciasEntreVariables) == []
+        variablesDeCacheado.all? {
+            |variable|
+          cacheado.instance_variable_get(variable).eql?(objeto.instance_variable_get(variable))
+        }
+      else
+        false
+      end
+    end
   end
 
   def self.invocacionCacheada(clase, simbolo, instancia, args)
     InvocacionCacheadaConEstado.new(clase, simbolo, instancia, args)
-  end
-
-  def self.compare_instances?(cacheado, objeto)
-    variablesDeCacheado = cacheado.instance_variables
-    variablesDeObjeto = objeto.instance_variables
-    diferenciasEntreVariables = (variablesDeCacheado - variablesDeObjeto) and (variablesDeObjeto - variablesDeCacheado)
-    if (diferenciasEntreVariables) == []
-      variablesDeCacheado.all? {
-          |variable|
-        cacheado.instance_variable_get(variable).eql?(objeto.instance_variable_get(variable))
-      }
-    else
-      false
-    end
   end
 
 end
