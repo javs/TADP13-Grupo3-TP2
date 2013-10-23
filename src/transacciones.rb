@@ -5,47 +5,24 @@ class AdviceTransaccion
 
   def initialize(objeto)
     @objeto = objeto
+    @objeto_copia = objeto.dup
   end
 
   def modificar_objecto
 
-    accessors = lista_de_accessors
+    crear_metodos_transacciones
 
-    return true if accessors.empty?
+    lista_de_accessors.each do |accessor|
 
-    @objeto.singleton_class.class_eval do
+      accessor_es_getter = accessor.name !~ /^(\w+)=$/ ? true : false
+      atributo_simbolo = "@#{accessor.name}".sub(/=/,'').to_sym
 
-      def commit
-
-        self.instance_variables.select do |variable|
-          variable =~ /copia$/
-        end.each do |variable|
-          self.instance_variable_set(variable.to_s.sub(/_copia/,'').to_sym,instance_variable_get(variable))
-        end
-
-      end
-
-      def rollback
-        puts 'rollbackeo'
-      end
-
-    end
-
-    accessors.each do |accessor|
-
-      accessor_es_setter = accessor.name =~ /^(\w+)=$/ ? true : false
-      accessor_copia = "@#{accessor.name}_copia".sub(/=/,'').to_sym
-
-      if accessor_es_setter
-        proc = Proc.new { |valor|
-          @objeto.instance_variable_set(accessor_copia,valor)
-        }
-      else
-        @objeto.instance_variable_set(accessor_copia,@objeto.send(accessor.name))
-        proc = Proc.new {
-          @objeto.instance_variable_get(accessor_copia)
-        }
-      end
+      proc = Proc.new { |valor|
+        @objeto_copia.instance_variable_set(atributo_simbolo,valor)
+      }
+      proc = Proc.new {
+        @objeto_copia.instance_variable_get(atributo_simbolo)
+      } if accessor_es_getter
 
       AdviceEnLugarDe.new(proc).modificar(@objeto.singleton_class,accessor)
 
@@ -70,9 +47,26 @@ class AdviceTransaccion
 
   end
 
+  def crear_metodos_transacciones
+
+    adivce_transaccion = self
+    objecto_copia = @objeto_copia
+
+    @objeto.singleton_class.class_eval do
+
+      define_method(:commit) do
+        objecto_copia.instance_variables.each do |atributo|
+          valor = objecto_copia.instance_variable_get(atributo)
+          self.instance_variable_set(atributo,valor)
+        end
+      end
+
+      define_method(:rollback) do
+        adivce_transaccion.instance_variable_set(:@objeto_copia,self.dup)
+      end
+
+    end
+
+  end
+
 end
-
-
-
-
-

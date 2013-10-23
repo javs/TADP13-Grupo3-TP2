@@ -31,6 +31,23 @@ describe AdviceTransaccion do
 
     persona.instance_variable_get(:@nombre).should == 'Pepe'
     persona.nombre.should == 'Pepe'
+
+  end
+
+  it 'debe poder hacer un rollback' do
+    persona = Persona.new
+    persona.nombre = 'Jorge'
+
+    AdviceTransaccion.new(persona).modificar_objecto
+
+    persona.nombre.should == 'Jorge'
+
+    persona.nombre = 'Pepe'
+    persona.nombre.should == 'Pepe'
+
+    persona.rollback
+    persona.nombre.should == 'Jorge'
+
   end
 
   it 'debe modificar solo a un objeto' do
