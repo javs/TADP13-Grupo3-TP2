@@ -17,7 +17,7 @@ class AdviceTransaccion
       accessor_es_getter = accessor.name !~ /^(\w+)=$/ ? true : false
       atributo_simbolo = "@#{accessor.name}".sub(/=/,'').to_sym
 
-      proc = Proc.new { |valor|
+      proc = Proc.new { |clase, simbolo, simbolo_original, instancia, valor|
         @objeto_copia.instance_variable_set(atributo_simbolo,valor)
       }
       proc = Proc.new {
