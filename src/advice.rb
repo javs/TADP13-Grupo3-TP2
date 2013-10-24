@@ -14,6 +14,11 @@ class Advice
         |param|
       param[1].to_s
     }
+
+    while clase.method_defined?(simbolo_original)
+      simbolo_original =  ("__" + simbolo_original.to_s + "__").to_sym
+    end
+
     clase.send :alias_method, simbolo_original, simbolo
     self.ejecucion_nueva(clase, simbolo, simbolo_original, *args)
 
@@ -45,7 +50,6 @@ class AdviceDespues < Advice
     accion = self.accion
     clase.class_eval do
       define_method(simbolo) do |*args|
-        self.send(simbolo_original, *args)
         resultado = self.send(simbolo_original, *args)
         accion.call *args
         resultado
