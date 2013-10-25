@@ -1,3 +1,4 @@
+require_relative 'motor_de_aspectos'
 require_relative 'join_point'
 require_relative 'advice'
 
@@ -12,40 +13,33 @@ class AdviceTransaccion
 
     crear_metodos_transacciones
 
-    lista_de_accessors.each do |accessor|
+    motor = MotorDeAspectos.new
 
-      accessor_es_getter = accessor.name !~ /^(\w+)=$/ ? true : false
-      atributo_simbolo = "@#{accessor.name}".sub(/=/,'').to_sym
+    proc = Proc.new { |clase, simbolo, simbolo_original, instancia|
+      atributo_simbolo = "@#{simbolo}".to_sym
+      @objeto_copia.instance_variable_get(atributo_simbolo)
+    }
 
-      proc = Proc.new { |clase, simbolo, simbolo_original, instancia, valor|
-        @objeto_copia.instance_variable_set(atributo_simbolo,valor)
-      }
-      proc = Proc.new {
-        @objeto_copia.instance_variable_get(atributo_simbolo)
-      } if accessor_es_getter
+    advice = AdviceEnLugarDe.new(proc)
 
-      AdviceEnLugarDe.new(proc).modificar(@objeto.singleton_class,accessor)
+    point_cut = JoinPointMetodosAccessors.new(@objeto.class).y((JoinPointNombreMetodo.new(/^(\w+)=$/)).no)
 
-    end
+    motor.aspecto(point_cut,advice,@objeto.singleton_class)
+
+    proc = Proc.new { |clase, simbolo, simbolo_original, instancia, valor|
+      atributo_simbolo = "@#{simbolo}".chop.to_sym
+      @objeto_copia.instance_variable_set(atributo_simbolo,valor)
+    }
+
+    advice = AdviceEnLugarDe.new(proc)
+
+    point_cut = JoinPointMetodosAccessors.new(@objeto.class).y(JoinPointNombreMetodo.new(/^(\w+)=$/))
+
+    motor.aspecto(point_cut,advice,@objeto.singleton_class)
 
   end
 
   private
-
-  def lista_de_accessors
-    metodos =
-        (@objeto.class.instance_methods +
-            @objeto.class.private_instance_methods).collect do |metodo|
-          @objeto.class.instance_method(metodo)
-        end
-
-    join_point = JoinPointMetodosAccessors.new(@objeto.class)
-
-    metodos.select do |metodo|
-      join_point.filtra_metodo?(@objeto.class, metodo)
-    end
-
-  end
 
   def crear_metodos_transacciones
 

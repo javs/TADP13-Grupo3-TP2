@@ -2,36 +2,40 @@ require_relative '../src/advice'
 
 class AbstractCache
 
-  @@cache = Array.new
-
   def self.cache
-    @@cache
+    raise 'subclass_responsibility'
   end
 
   def self.advice
-    cachearODevolverCacheado = Proc.new {
-        |clase, simbolo, simboloOriginal, instancia, *args|
-      invocacion = invocacionCacheada(clase, simbolo, instancia, args)
-      invocacion_cacheada = AbstractCache.cache.detect {|cached| cached.eql? invocacion}
+    cachear_o_devolver_cacheado = Proc.new {
+        |clase, simbolo, simbolo_original, instancia, *args|
+      invocacion = invocacion_cacheada(clase, simbolo, instancia, args)
+      invocacion_cacheada = self.cache.detect {|cached| cached.eql? invocacion}
       unless invocacion_cacheada.nil?
         next invocacion_cacheada.resultado
       else
-        resultado = instancia.send simboloOriginal, *args
+        resultado = instancia.send simbolo_original, *args
         invocacion.resultado = resultado
-        AbstractCache.cache << invocacion
+        self.cache << invocacion
       end
       resultado
     }
-    AdviceEnLugarDe.new(cachearODevolverCacheado)
+    AdviceEnLugarDe.new(cachear_o_devolver_cacheado)
   end
 
-  def self.invocacionCacheada(clase, simbolo, instancia, args)
-    raise :subclass_responsability
+  def self.invocacion_cacheada(clase, simbolo, instancia, args)
+    raise 'subclass_responsibility'
   end
 
 end
 
 class StatelessCache < AbstractCache
+
+  @@cache = Array.new
+
+  def self.cache
+    @@cache
+  end
 
   InvocacionCacheadaSinEstado = Struct.new(:clase, :simbolo, :args, :resultado) do
     def eql?(other)
@@ -39,7 +43,7 @@ class StatelessCache < AbstractCache
     end
   end
 
-  def self.invocacionCacheada(clase, simbolo, instancia, args)
+  def self.invocacion_cacheada(clase, simbolo, instancia, args)
     InvocacionCacheadaSinEstado.new(clase, simbolo, args)
   end
 
@@ -47,16 +51,22 @@ end
 
 class StatefulCache < AbstractCache
 
+  @@cache = Array.new
+
+  def self.cache
+    @@cache
+  end
+
   InvocacionCacheadaConEstado = Struct.new(:clase, :simbolo, :estado, :args, :resultado) do
     def eql?(other)
       (clase.eql? other.clase) and (simbolo.eql? other.simbolo) and (args.eql? other.args) and (compare_estados?(estado,other.estado))
     end
     def compare_estados?(cacheado, objeto)
-      variablesDeCacheado = cacheado.keys
-      variablesDeObjeto = objeto.keys
-      diferenciasEntreVariables = (variablesDeCacheado - variablesDeObjeto) and (variablesDeObjeto - variablesDeCacheado)
-      if (diferenciasEntreVariables) == []
-        variablesDeCacheado.all? {
+      variables_de_cacheado = cacheado.keys
+      variables_de_objeto = objeto.keys
+      diferencias_entre_variables = (variables_de_cacheado - variables_de_objeto) and (variables_de_objeto - variables_de_cacheado)
+      if (diferencias_entre_variables) == []
+        variables_de_cacheado.all? {
             |variable|
           cacheado[variable].eql?(objeto[variable])
         }
@@ -66,7 +76,7 @@ class StatefulCache < AbstractCache
     end
   end
 
-  def self.invocacionCacheada(clase, simbolo, instancia, args)
+  def self.invocacion_cacheada(clase, simbolo, instancia, args)
     estado = Hash.new
     instancia.instance_variables.each {
       | variable | estado[variable] = instancia.instance_variable_get(variable)
