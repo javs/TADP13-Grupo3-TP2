@@ -67,5 +67,35 @@ describe AdviceTransaccion do
 
   end
 
+  it 'debe realizar el autocommit al ejecutar el set del atributo' do
+
+    persona = Persona.new
+
+    advice = AdviceTransaccion.new(persona)
+    advice.autocommit = true
+    advice.modificar_objecto
+
+    persona.nombre = 'Pepe'
+    persona.rollback
+    persona.nombre.should == 'Pepe'
+    persona.instance_variable_get(:@nombre).should == 'Pepe'
+
+  end
+
+  it 'debe realizar el autorollback al ejecutar el set del atributo y salga por error' do
+
+    persona = Persona.new
+    persona.nombre = 'Jorge'
+
+    advice = AdviceTransaccion.new(persona)
+    advice.autocommit =true
+    advice.modificar_objecto
+
+
+    persona.nombre = 'Pepe'
+
+    persona.nombre.should == 'Jorge'
+
+  end
 
 end
