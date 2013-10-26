@@ -127,3 +127,15 @@ class JoinPointMetodosEspecificos < JoinPoint
   end
 
 end
+
+class JoinPointMetodoDeInstancia < JoinPoint
+  def filtra_metodo?(clase, metodo)
+    clase.instance_methods.include? metodo
+  end
+end
+
+class JoinPointMetodoDeClase < JoinPoint
+  def filtra_metodo?(clase, metodo)
+    clase.methods.include? metodo
+  end
+end

@@ -1,5 +1,6 @@
 require_relative 'join_point'
 require_relative 'advice'
+require_relative 'method_observer'
 
 class MotorDeAspectos
   def aspecto(point_cut, advice, auto_clase=nil)
@@ -15,8 +16,10 @@ class MotorDeAspectos
 
     metodos_a_analizar.each_pair do |clase, metodos|
       metodos.each do |metodo|
-        metodos_a_modificar[clase] = Array.new if metodos_a_modificar[clase].nil?
-        metodos_a_modificar[clase].push(metodo) if point_cut.filtra_metodo?(clase, metodo)
+        if point_cut.filtra_metodo?(clase, metodo)
+          metodos_a_modificar[clase] = Array.new if metodos_a_modificar[clase].nil?
+          metodos_a_modificar[clase].push(metodo)
+        end
       end
     end
 
@@ -25,9 +28,16 @@ class MotorDeAspectos
         advice.modificar(clase, metodo)
       end
     end
+
+    observar_nuevos_metodos(point_cut, advice)
   end
 
- private
+  def observar_nuevos_metodos(point_cut, advice)
+    Class.send(:include, MethodObserver) unless Class.include? MethodObserver
+    Class.__agregar_aspecto__(point_cut, advice)
+  end
+
+  private
 
   def todos_los_metodos
     @todos = Hash.new
