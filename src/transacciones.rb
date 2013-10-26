@@ -45,6 +45,11 @@ class AdviceTransaccion
 
       motor.aspecto(point_cut3,otroadvice,@objeto.singleton_class)
 
+      otroadvice2 = AdviceError.new(Proc.new {|objeto, *args| objeto.rollback})
+
+      point_cut4 = JoinPointMetodosAccessors.new(@objeto.singleton_class).y(JoinPointNombreMetodo.new(/^(\w+)=$/))
+
+      motor.aspecto(point_cut4,otroadvice2,@objeto.singleton_class)
     end
 
   end

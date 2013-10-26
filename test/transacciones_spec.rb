@@ -88,13 +88,17 @@ describe AdviceTransaccion do
     persona.nombre = 'Jorge'
 
     advice = AdviceTransaccion.new(persona)
-    persona.nombre.should ==
+
+    adviceAntes = AdviceAntes.new(Proc.new {raise 'ERROR EJECUTANDO ROLLBACK'})
+    point_cut = JoinPointMetodosAccessors.new(persona.singleton_class).y(JoinPointMetodosEspecificos.new(Persona.instance_method(:nombre=)))
+    MotorDeAspectos.new.aspecto(point_cut,adviceAntes,persona.singleton_class)
+
     advice.autocommit = true
     advice.modificar_objecto
 
 
     persona.nombre = 'Pepe'
-
+    persona.commit
     persona.nombre.should == 'Jorge'
 
   end
