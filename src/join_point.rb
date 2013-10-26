@@ -105,10 +105,13 @@ class JoinPointNombreParametros < JoinPointExpresionRegular
 end
 
 class JoinPointMetodosAccessors < JoinPoint
-  def initialize(clase)
+  def initialize(clase,tipo=nil)
     setters =  (clase.instance_methods + clase.private_instance_methods).select{|item| item.to_s =~ /^(\w+)=$/}
     getters = setters.collect{|item| item.to_s.slice(0..item.to_s.length-2)}
-    @metodos = (setters + getters).collect{|item| clase.instance_method(item)}
+    metodos = []
+    metodos = (setters).collect{|item| clase.instance_method(item)} unless tipo == 'getters'
+    metodos = metodos + (getters).collect{|item| clase.instance_method(item)} unless tipo == 'setters'
+    @metodos = metodos
   end
 
   def filtra_metodo?(clase, metodo)

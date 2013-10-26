@@ -36,7 +36,7 @@ class AdviceAntes < Advice
     accion = self.accion
     clase.class_eval do
       define_method(simbolo) do |*args|
-        accion.call *args
+        accion.call clase, simbolo, simbolo_original, self, *args
         self.send(simbolo_original, *args)
       end
     end
@@ -51,7 +51,7 @@ class AdviceDespues < Advice
     clase.class_eval do
       define_method(simbolo) do |*args|
         resultado = self.send(simbolo_original, *args)
-        accion.call self, *args
+        accion.call clase, simbolo, simbolo_original, self, *args
         resultado
       end
     end
@@ -68,7 +68,7 @@ class AdviceError < Advice
         begin
           resultado = self.send(simbolo_original, *args)
         rescue
-          accion.call self, *args
+          accion.call clase, simbolo, simbolo_original, self, *args
           resultado
         end
       end

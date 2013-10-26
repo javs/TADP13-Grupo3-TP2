@@ -23,7 +23,7 @@ class AdviceTransaccion
 
     advice = AdviceEnLugarDe.new(proc)
 
-    point_cut = JoinPointMetodosAccessors.new(@objeto.class).y((JoinPointNombreMetodo.new(/^(\w+)=$/)).no)
+    point_cut = JoinPointMetodosAccessors.new(@objeto.class,'getters')
 
     motor.aspecto(point_cut,advice,@objeto.singleton_class)
 
@@ -32,24 +32,24 @@ class AdviceTransaccion
       @objeto_copia.instance_variable_set(atributo_simbolo,valor)
     }
 
-    advice2 = AdviceEnLugarDe.new(proc)
+    advice = AdviceEnLugarDe.new(proc)
 
-    point_cut2 = JoinPointMetodosAccessors.new(@objeto.class).y(JoinPointNombreMetodo.new(/^(\w+)=$/))
+    point_cut = JoinPointMetodosAccessors.new(@objeto.class,'setters')
 
-    motor.aspecto(point_cut2,advice2,@objeto.singleton_class)
+    motor.aspecto(point_cut,advice,@objeto.singleton_class)
 
-    if(@autocommit)
-      otroadvice = AdviceDespues.new(Proc.new {|objeto, *args| objeto.commit})
+    if autocommit
+      advice = AdviceDespues.new(Proc.new {|clase, simbolo, simbolo_original, instancia| instancia.commit})
 
-      point_cut3 = JoinPointMetodosAccessors.new(@objeto.singleton_class).y(JoinPointNombreMetodo.new(/^(\w+)=$/))
+      point_cut = JoinPointMetodosAccessors.new(@objeto.singleton_class,'setters')
 
-      motor.aspecto(point_cut3,otroadvice,@objeto.singleton_class)
+      motor.aspecto(point_cut,advice,@objeto.singleton_class)
 
-      otroadvice2 = AdviceError.new(Proc.new {|objeto, *args| objeto.rollback})
+      advice = AdviceError.new(Proc.new {|clase, simbolo, simbolo_original, instancia| instancia.rollback})
 
-      point_cut4 = JoinPointMetodosAccessors.new(@objeto.singleton_class).y(JoinPointNombreMetodo.new(/^(\w+)=$/))
+      point_cut = JoinPointMetodosAccessors.new(@objeto.singleton_class,'setters')
 
-      motor.aspecto(point_cut4,otroadvice2,@objeto.singleton_class)
+      motor.aspecto(point_cut,advice,@objeto.singleton_class)
     end
 
   end
