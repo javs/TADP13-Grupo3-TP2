@@ -88,7 +88,8 @@ describe AdviceTransaccion do
     persona.nombre = 'Jorge'
 
     advice = AdviceTransaccion.new(persona)
-    advice.autocommit =true
+    persona.nombre.should ==
+    advice.autocommit = true
     advice.modificar_objecto
 
 
