@@ -23,13 +23,13 @@ class MotorDeAspectos
       end
     end
 
+    observar_nuevos_metodos(point_cut, advice)
+
     metodos_a_modificar.each do |clase, metodos|
       metodos.each do |metodo|
         advice.modificar(clase, metodo)
       end
     end
-
-    observar_nuevos_metodos(point_cut, advice)
   end
 
   def observar_nuevos_metodos(point_cut, advice)

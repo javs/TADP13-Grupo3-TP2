@@ -1,3 +1,5 @@
+require_relative 'method_observer'
+
 class Advice
 
   attr_accessor :accion
@@ -19,9 +21,12 @@ class Advice
       simbolo_original =  ("__" + simbolo_original.to_s + "__").to_sym
     end
 
+    Class.permitir_aplicar_aspectos_a_nuevos_metodos = false
+
     clase.send :alias_method, simbolo_original, simbolo
     self.ejecucion_nueva(clase, simbolo, simbolo_original, *args)
 
+    Class.permitir_aplicar_aspectos_a_nuevos_metodos = true
   end
 
   def ejecucion_nueva(clase, simbolo, simbolo_original, *args)

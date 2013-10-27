@@ -1,6 +1,8 @@
 require 'rspec'
 
 require_relative '../src/cache'
+require_relative '../src/join_point'
+require_relative '../src/motor_de_aspectos'
 
 describe StatelessCache do
 
@@ -25,14 +27,20 @@ describe StatelessCache do
         rand(1000000)
       end
     end
+
+    @motor = MotorDeAspectos.new
+    @point_cut = JoinPointClasesEspecificas.new(Perro)
   end
 
   after do
     Object.send :remove_const, :Perro
+    @motor = nil
+    @point_cut = nil
   end
 
   it 'debe cachear la invocacion de metodos' do
-    StatelessCache.advice.modificar(Perro, Perro.instance_method(:devolver_random))
+    @motor.aspecto(@point_cut.y(JoinPointNombreMetodo.new(/devolver_random/)),
+                   StatelessCache.advice)
     perro = Perro.new
     StatelessCache.cache.length.should == 0
     cacheado = perro.devolver_random
@@ -69,14 +77,20 @@ describe StatefulCache do
         rand(1000000)
       end
     end
+
+    @motor = MotorDeAspectos.new
+    @point_cut = JoinPointClasesEspecificas.new(Perro)
   end
 
   after do
     Object.send :remove_const, :Perro
+    @motor = nil
+    @point_cut = nil
   end
 
   it 'debe cachear la invocacion con estado' do
-    StatefulCache.advice.modificar(Perro,Perro.instance_method(:hacer_algo))
+    @motor.aspecto(@point_cut.y(JoinPointNombreMetodo.new(/hacer_algo/)),
+                   StatefulCache.advice)
     perro = Perro.new
     perro.nombre = 'Juan'
     perro.edad = 7
