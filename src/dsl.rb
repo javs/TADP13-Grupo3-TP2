@@ -1,4 +1,5 @@
 require_relative '../src/motor_de_aspectos'
+require_relative '../src/transacciones'
 
 class Aspecto
 
@@ -60,8 +61,16 @@ class Aspecto
     JoinPointNombreParametros.new(regex)
   end
 
-  def nombre(joinpoint)
-    joinpoint
+  def aridad(cantidad)
+    JoinPointAridadMetodo.new(cantidad)
+  end
+
+  def transaccionable(objeto)
+    AdviceTransaccion.new(objeto).modificar_objecto
+  end
+
+  def nombre(objeto)
+    objeto
   end
 
   def con(objeto)
@@ -113,6 +122,22 @@ class Aspecto
   end
 
   def a(objeto)
+    objeto
+  end
+
+  def es(objeto)
+    objeto
+  end
+
+  def hacer(objeto)
+    objeto
+  end
+
+  def al(objeto)
+    objeto
+  end
+
+  def objeto(objeto)
     objeto
   end
 

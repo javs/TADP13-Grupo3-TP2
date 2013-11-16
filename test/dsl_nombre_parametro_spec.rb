@@ -1,4 +1,3 @@
-require 'rspec'
 require_relative '../src/dsl'
 require_relative 'fixture'
 
@@ -49,7 +48,7 @@ describe JoinPointNombreParametros do
 
     objeto = NombreParametro.new(3)
     objeto.una_variable.should == 3
-    objeto.metodo_con_parametro_de_nombre(:no_me_importa).should == 3
+    objeto.metodo_con_parametro_de_nombre(:no_me_importa).should == 10
     objeto.una_variable.should == 10
 
   end
