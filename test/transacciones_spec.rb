@@ -29,8 +29,8 @@ describe AdviceTransaccion do
 
     persona.commit
 
-    persona.instance_variable_get(:@nombre).should == 'Pepe'
     persona.nombre.should == 'Pepe'
+    persona.instance_variable_get(:@nombre).should == 'Pepe'
 
   end
 
@@ -89,13 +89,12 @@ describe AdviceTransaccion do
 
     advice = AdviceTransaccion.new(persona)
 
-    adviceAntes = AdviceAntes.new(Proc.new {raise 'ERROR EJECUTANDO ROLLBACK'})
-    point_cut = JoinPointMetodosAccessors.new(persona.singleton_class).y(JoinPointMetodosEspecificos.new(Persona.instance_method(:nombre=)))
-    MotorDeAspectos.new.aspecto(point_cut,adviceAntes,persona.singleton_class)
-
     advice.autocommit = true
     advice.modificar_objecto
 
+    sym = '____nombre=____'
+    proc = Proc.new { |a| raise 'errror' }
+    persona.define_singleton_method sym, proc
 
     persona.nombre = 'Pepe'
     persona.commit

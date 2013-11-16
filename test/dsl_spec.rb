@@ -2,11 +2,16 @@ require 'rspec'
 require_relative '../src/dsl'
 require_relative 'fixture'
 
-describe Configuracion do
+describe Aspecto do
+
+  after(:each) do
+    Class.class_variable_set(:@@aspectos,[])
+    load 'fixture.rb'
+  end
 
   it 'debe hacer algo despues' do
 
-    Configuracion.aspecto do
+    Aspecto.aplicar do
 
      si coincide el nombre de la clase con /^Linyera$/
      y coincide el nombre del metodo con /^vagar$/
@@ -20,7 +25,7 @@ describe Configuracion do
 
   it 'debe hacer algo antes' do
 
-    Configuracion.aspecto do
+    Aspecto.aplicar do
 
       si coincide el nombre de la clase con /^Linyera$/
       y coincide el nombre del metodo con /^vagar$/
@@ -34,7 +39,7 @@ describe Configuracion do
 
   it 'debe hacer algo en lugar de' do
 
-    Configuracion.aspecto do
+    Aspecto.aplicar do
 
       si coincide el nombre de la clase con /^Linyera$/
       y coincide el nombre del metodo con /^vagar$/
@@ -48,7 +53,7 @@ describe Configuracion do
 
   it 'debe hacer algo si hay error' do
 
-    Configuracion.aspecto do
+    Aspecto.aplicar do
 
       si coincide el nombre de la clase con /^Linyera$/
       y coincide el nombre del metodo con /^c$/
@@ -59,6 +64,19 @@ describe Configuracion do
     puts '--------------------------------'
     Linyera.new.comprar_ferrari
     Linyera.new.vagar
+    puts '--------------------------------'
+  end
+
+  it 'debe ejecutar si pertenece a persona' do
+
+    Aspecto.aplicar do
+
+      si pertenece a la jerarquia de Persona
+      entonces ejecutar despues del original Proc.new { puts 'hago algo, luego existo' }
+
+    end
+    puts '--------------------------------'
+    Linyera.new.hacer_algo
     puts '--------------------------------'
   end
 

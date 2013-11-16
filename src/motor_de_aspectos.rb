@@ -9,7 +9,7 @@ class MotorDeAspectos
     metodos_a_modificar = Hash.new
 
     if auto_clase
-      metodos_a_analizar[auto_clase] = metodos_de_una_clase(auto_clase)
+      metodos_a_analizar[auto_clase] = metodos_de_una_clase(auto_clase) + metodos_de_una_clase(auto_clase.superclass)
     else
       metodos_a_analizar = todos_los_metodos
     end
@@ -50,8 +50,7 @@ class MotorDeAspectos
   end
 
   def metodos_de_una_clase(clase)
-    (clase.methods + clase.private_methods).collect { |m| clase.method(m) } +
-    (clase.instance_methods + clase.private_instance_methods).collect { |m| clase.instance_method(m) }
+    (clase.instance_methods(false)).collect { |m| clase.instance_method(m) }
   end
 
 end

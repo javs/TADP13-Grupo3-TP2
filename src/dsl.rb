@@ -1,14 +1,10 @@
 require_relative '../src/motor_de_aspectos'
 
-class Configuracion
+class Aspecto
 
-  def self.aspecto(&bloque_configuracion)
+  def self.aplicar(&bloque_configuracion)
     Aspecto.new.instance_eval &bloque_configuracion
   end
-
-end
-
-class Aspecto
 
   def reemplazando(bloque)
     AdviceEnLugarDe.new bloque
@@ -39,7 +35,7 @@ class Aspecto
   end
 
   def no(joinpoint)
-    @point_cut = joinpoint.no
+    joinpoint.no
   end
 
   def ejecutar(advice)
@@ -52,6 +48,10 @@ class Aspecto
 
   def metodo(regex)
     JoinPointNombreMetodo.new(regex)
+  end
+
+  def jerarquia(clase)
+    JoinPointJerarquiaDeClase.new(clase)
   end
 
   def nombre(joinpoint)
@@ -99,6 +99,14 @@ class Aspecto
   end
 
   def caso(objeto)
+    objeto
+  end
+
+  def pertenece(objeto)
+    objeto
+  end
+
+  def a(objeto)
     objeto
   end
 
