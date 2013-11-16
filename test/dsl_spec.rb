@@ -80,4 +80,15 @@ describe Aspecto do
     puts '--------------------------------'
   end
 
+  it 'sacarme' do
+    # si clase /algo/                   # JoinPointNombreClase y especifica (llama a uno u otro dependiendo de si la clase es class u otra cosa)
+    # si metodo /algo/                  # JoinPointNombreMetodo y especifico (similar al anterior)
+    # si aridad 1                       # aridad
+    # si jerarquia Persona              # jerarquia
+    # si parametros opcionales          # tipo de parametros (:opt)
+    # si parametros requeridos          # tipo de parametros (:req)
+    # si accessors de Persona           # accessors
+    # si parametro /algo/               # nombre de parametro
+  end
+
 end
