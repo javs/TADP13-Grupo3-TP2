@@ -23,6 +23,7 @@ class Aspecto
   end
 
   def si(point_cut)
+    raise 'un_solo_si_permitido_exception' unless @point_cut.nil?
     @point_cut = point_cut
   end
 
@@ -40,6 +41,7 @@ class Aspecto
 
   def ejecutar(advice)
     MotorDeAspectos.new.aspecto(@point_cut,advice)
+    @point_cut = nil
   end
 
   def clase(regex)
@@ -52,6 +54,10 @@ class Aspecto
 
   def jerarquia(clase)
     JoinPointJerarquiaDeClase.new(clase)
+  end
+
+  def parametro(regex)
+    JoinPointNombreParametros.new(regex)
   end
 
   def nombre(joinpoint)
