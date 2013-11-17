@@ -4,7 +4,7 @@ require_relative 'fixture'
 describe Aspecto do
 
   after(:each) do
-    Class.class_variable_set(:@@aspectos,[])
+    Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
   end
 
@@ -13,7 +13,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
      si coincide el nombre de la clase con /^Linyera$/
-     entonces ejecutar despues del original Proc.new { 'despues de vagar' }
+     entonces ejecutar despues del original proc { 'despues de vagar' }
 
     end
 
@@ -28,7 +28,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre de la clase con /^Linyera$/
-      entonces ejecutar antes del original Proc.new { |clase, simbolo, simbolo_original, instancia, *args|
+      entonces ejecutar antes del original proc { |clase, simbolo, simbolo_original, instancia, *args|
         instancia.instance_variable_set(:@variable,1)
       }
 
@@ -45,7 +45,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre del metodo con /^vagar$/
-      entonces ejecutar reemplazando el original con Proc.new { 'en lugar de vagar' }
+      entonces ejecutar reemplazando el original con proc { 'en lugar de vagar' }
 
     end
 
@@ -58,7 +58,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre del metodo con /^comprar_ferrari$/
-      entonces ejecutar en caso de error Proc.new { 'no puede comprar ferrari' }
+      entonces ejecutar en caso de error proc { 'no puede comprar ferrari' }
 
     end
 
@@ -66,7 +66,8 @@ describe Aspecto do
 
   end
 
-  it 'sacarme' do
+  it 'sacarme cuando este terminado el DSL' do
+    true.should == false
     # si clase /algo/                   # JoinPointNombreClase y especifica (llama a uno u otro dependiendo de si la clase es class u otra cosa)
     # si metodo /algo/                  # JoinPointNombreMetodo y especifico (similar al anterior)
     # si aridad 1                       # aridad

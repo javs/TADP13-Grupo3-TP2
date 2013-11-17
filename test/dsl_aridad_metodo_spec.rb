@@ -4,7 +4,7 @@ require_relative 'fixture'
 describe Aspecto do
 
   after(:each) do
-    Class.class_variable_set(:@@aspectos,[])
+    Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
   end
 
@@ -14,7 +14,7 @@ describe Aspecto do
 
       si coincide el nombre del metodo con /hacer_algo/
       y la aridad es 1
-      entonces ejecutar reemplazando el original con Proc.new { 'la aridad es 1' }
+      entonces ejecutar reemplazando el original con proc { 'la aridad es 1' }
 
     end
 
@@ -28,7 +28,7 @@ describe Aspecto do
 
       si coincide el nombre del metodo con /hacer_algo/
       y la aridad es 1
-      entonces ejecutar reemplazando el original con Proc.new { 'la aridad es 1' }
+      entonces ejecutar reemplazando el original con proc { 'la aridad es 1' }
 
     end
 

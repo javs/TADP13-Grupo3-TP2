@@ -12,11 +12,11 @@ describe 'Metodos agregados dinamicamente' do
     @motor = MotorDeAspectos.new
     @point_cut = JoinPointClasesEspecificas.new(UnaClaseSinMetodos)
 
-    @advice = AdviceEnLugarDe.new(Proc.new { 1969 })
+    @advice = AdviceEnLugarDe.new(proc { 1969 })
   end
 
   it 'debe agregar advices a metodos de instancia nuevos' do
-    @motor.aspecto(@point_cut.y(JoinPointMetodoDeInstancia.new), @advice)
+    @motor.aspecto(@point_cut, @advice)
 
     class UnaClaseSinMetodos
       def ahora_tiene_un_metodo

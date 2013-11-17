@@ -4,7 +4,7 @@ require_relative 'fixture'
 describe Aspecto do
 
   after(:each) do
-    Class.class_variable_set(:@@aspectos,[])
+    Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
   end
 

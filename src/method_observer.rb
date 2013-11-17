@@ -29,4 +29,8 @@ module MethodObserver
   def permitir_aplicar_aspectos_a_nuevos_metodos=(valor)
     @@no_procesar = !valor
   end
+
+  def olvidar_aspectos_conocidos
+    @@aspectos = []
+  end
 end

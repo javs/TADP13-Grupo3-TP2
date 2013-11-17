@@ -4,7 +4,7 @@ require_relative 'fixture'
 describe Aspecto do
 
   after(:each) do
-    Class.class_variable_set(:@@aspectos,[])
+    Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
   end
 
@@ -14,7 +14,7 @@ describe Aspecto do
 
       si pertenece a la jerarquia de Persona
       y coincide el nombre del metodo con /hacer/
-      entonces ejecutar reemplazando el original con Proc.new { 'soy de clase Persona' }
+      entonces ejecutar reemplazando el original con proc { 'soy de clase Persona' }
 
     end
     Linyera.new.hacer_algo.should == 'soy de clase Persona'
@@ -27,7 +27,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si pertenece a la jerarquia de Linyera
-      entonces ejecutar reemplazando el original con Proc.new { 'soy de clase Linyera' }
+      entonces ejecutar reemplazando el original con proc { 'soy de clase Linyera' }
 
     end
     Linyera.new.vagar.should == 'soy de clase Linyera'
