@@ -13,7 +13,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
      si coincide el nombre de la clase con /^Linyera$/
-     entonces ejecutar despues del original proc { 'despues de vagar' }
+     entonces ejecutar despues del original el proc { 'despues de vagar' }
 
     end
 
@@ -28,7 +28,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre de la clase con /^Linyera$/
-      entonces ejecutar antes del original proc { |clase, simbolo, simbolo_original, instancia, *args|
+      entonces ejecutar antes del original el proc { |clase, simbolo, simbolo_original, instancia, *args|
         instancia.instance_variable_set(:@variable,1)
       }
 
@@ -45,7 +45,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre del metodo con /^vagar$/
-      entonces ejecutar reemplazando el original con proc { 'en lugar de vagar' }
+      entonces ejecutar reemplazando el original con el proc { 'en lugar de vagar' }
 
     end
 
@@ -58,7 +58,7 @@ describe Aspecto do
     Aspecto.aplicar do
 
       si coincide el nombre del metodo con /^comprar_ferrari$/
-      entonces ejecutar en caso de error proc { 'no puede comprar ferrari' }
+      entonces ejecutar en caso de error el proc { 'no puede comprar ferrari' }
 
     end
 

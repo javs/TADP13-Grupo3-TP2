@@ -11,6 +11,8 @@ class Aspecto
     AdviceEnLugarDe.new bloque
   end
 
+  alias_method :lugar, :reemplazando
+
   def despues(bloque)
     AdviceDespues.new bloque
   end
@@ -45,8 +47,12 @@ class Aspecto
     @point_cut = nil
   end
 
-  def clase(regex)
-    JoinPointNombreClase.new(regex)
+  def clase(obj)
+    if (obj.class == Class)
+      JoinPointClasesEspecificas.new obj
+    else
+      JoinPointNombreClase.new obj
+    end
   end
 
   def metodo(regex)
