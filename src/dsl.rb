@@ -55,6 +55,10 @@ class Aspecto
     end
   end
 
+  def clase_accessor(obj)
+    JoinPointMetodosAccessors.new obj
+  end
+
   def metodo(regex)
     JoinPointNombreMetodo.new(regex)
   end
@@ -156,4 +160,4 @@ class Aspecto
     objeto
   end
 
-end
+  end
