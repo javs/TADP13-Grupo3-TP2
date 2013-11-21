@@ -63,8 +63,13 @@ class Aspecto
     JoinPointJerarquiaDeClase.new(clase)
   end
 
-  def parametro(regex)
-    JoinPointNombreParametros.new(regex)
+  def parametro(param)
+    if param.eql? :opt or param.eql? :req
+      JoinPointTipoDeParametros.new(param)
+    else
+      JoinPointNombreParametros.new(param)
+    end
+
   end
 
   def aridad(cantidad)
@@ -88,6 +93,10 @@ class Aspecto
   end
 
   def matchea(objeto)
+    objeto
+  end
+
+  def tipo(objeto)
     objeto
   end
 
