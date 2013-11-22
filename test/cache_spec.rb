@@ -6,6 +6,11 @@ require_relative '../src/motor_de_aspectos'
 
 describe StatelessCache do
 
+  after(:each) do
+    StatefulCache.clear_cache
+    StatelessCache.clear_cache
+  end
+
   before do
     class Perro
 
@@ -55,6 +60,11 @@ describe StatelessCache do
 end
 
 describe StatefulCache do
+
+  after(:each) do
+    StatefulCache.clear_cache
+    StatelessCache.clear_cache
+  end
 
   before do
     class Perro

@@ -1,32 +1,11 @@
 require_relative '../src/dsl'
 require_relative 'fixture'
 
-describe JoinPointNombreParametros do
+describe 'DSL para nombre de parametros' do
 
   after(:each) do
     Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
-  end
-
-  before(:each) do
-    class NombreParametro
-
-      attr_accessor :una_variable
-
-      def initialize(un_numero)
-        @una_variable = un_numero
-      end
-
-      def metodo_con_parametro_de_nombre(un_nombre)
-        @una_variable
-      end
-
-      def +(un_numero)
-        @una_variable = @una_variable + un_numero
-        @una_variable
-      end
-
-    end
   end
 
   it 'debe hacer algo despues si coincide el nombre del parametro' do

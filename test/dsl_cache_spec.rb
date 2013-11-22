@@ -10,6 +10,8 @@ describe 'DSL CACHES' do
   after(:each) do
     Class.olvidar_aspectos_conocidos
     load 'fixture.rb'
+    StatefulCache.clear_cache
+    StatelessCache.clear_cache
   end
 
   it 'debe cachear la invocacion de metodos' do

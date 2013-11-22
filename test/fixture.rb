@@ -10,6 +10,10 @@ class Persona
     puts 'Haciendo algo'
   end
 
+  def devolver(objeto)
+    objeto
+  end
+
   def hacer_algo_de_una_forma(forma)
     puts "Haciendo algo de la forma: #{forma}"
   end
@@ -50,6 +54,25 @@ class Linyera < Persona
 
   def comprar_ferrari
     raise 'No puede comprar ferrari'
+  end
+
+end
+
+class NombreParametro
+
+  attr_accessor :una_variable
+
+  def initialize(un_numero)
+    @una_variable = un_numero
+  end
+
+  def metodo_con_parametro_de_nombre(un_nombre)
+    @una_variable
+  end
+
+  def +(un_numero)
+    @una_variable = @una_variable + un_numero
+    @una_variable
   end
 
 end

@@ -27,6 +27,10 @@ class AbstractCache
     raise 'subclass_responsibility'
   end
 
+  def self.clear_cache
+    @@cache = Array.new
+  end
+
 end
 
 class StatelessCache < AbstractCache
