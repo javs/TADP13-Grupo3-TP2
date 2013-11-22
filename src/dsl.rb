@@ -48,14 +48,14 @@ class Aspecto
   end
 
   def clase(obj)
-    if (obj.class == Class)
+    if obj.class == Class
       JoinPointClasesEspecificas.new obj
     else
       JoinPointNombreClase.new obj
     end
   end
 
-  def clase_accessor(obj)
+  def accessor(obj)
     JoinPointMetodosAccessors.new obj
   end
 
@@ -102,7 +102,7 @@ class Aspecto
 
   crear_pasamanos :hacer, :es, :pertenece, :coincide, :matchea
   crear_pasamanos :nombre, :original, :tipo, :caso, :objeto
-  crear_pasamanos :en, :a, :de, :con, :entonces
+  crear_pasamanos :en, :a, :de, :un, :con, :entonces
   crear_pasamanos :el, :la, :al, :del
 
 
