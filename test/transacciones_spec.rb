@@ -5,100 +5,106 @@ require_relative '../test/fixture'
 
 describe AdviceTransaccion do
 
+  before(:all) do
+    class Mascota
+      attr_accessor :nombre
+    end
+  end
+
   it 'debe trabajar con copias de los atributos' do
 
-    persona = Persona.new
+    perro = Mascota.new
 
-    AdviceTransaccion.new(persona).modificar_objecto
+    AdviceTransaccion.new(perro).modificar_objecto
 
-    persona.nombre = 'Pepe'
-    persona.nombre.should == 'Pepe'
-    persona.instance_variable_get(:@nombre).should == nil
+    perro.nombre = 'Pepe'
+    perro.nombre.should == 'Pepe'
+    perro.instance_variable_get(:@nombre).should == nil
 
   end
 
   it 'debe poder hacer un commit' do
 
-    persona = Persona.new
+    perro = Mascota.new
 
-    AdviceTransaccion.new(persona).modificar_objecto
+    AdviceTransaccion.new(perro).modificar_objecto
 
-    persona.nombre = 'Pepe'
-    persona.nombre.should == 'Pepe'
-    persona.instance_variable_get(:@nombre).should == nil
+    perro.nombre = 'Pepe'
+    perro.nombre.should == 'Pepe'
+    perro.instance_variable_get(:@nombre).should == nil
 
-    persona.commit
+    perro.commit
 
-    persona.nombre.should == 'Pepe'
-    persona.instance_variable_get(:@nombre).should == 'Pepe'
+    perro.nombre.should == 'Pepe'
+    perro.instance_variable_get(:@nombre).should == 'Pepe'
 
   end
 
   it 'debe poder hacer un rollback' do
-    persona = Persona.new
-    persona.nombre = 'Jorge'
+    perro = Mascota.new
+    perro.nombre = 'Jorge'
 
-    AdviceTransaccion.new(persona).modificar_objecto
+    AdviceTransaccion.new(perro).modificar_objecto
 
-    persona.nombre.should == 'Jorge'
+    perro.nombre.should == 'Jorge'
 
-    persona.nombre = 'Pepe'
-    persona.nombre.should == 'Pepe'
+    perro.nombre = 'Pepe'
+    perro.nombre.should == 'Pepe'
 
-    persona.rollback
-    persona.nombre.should == 'Jorge'
+    perro.rollback
+    perro.nombre.should == 'Jorge'
 
   end
 
   it 'debe modificar solo a un objeto' do
 
-    persona = Persona.new
-    otra_persona = Persona.new
+    perro = Mascota.new
+    otro_perro = Mascota.new
 
-    AdviceTransaccion.new(persona).modificar_objecto
+    AdviceTransaccion.new(perro).modificar_objecto
 
-    persona.nombre = 'Pepe'
-    persona.nombre.should == 'Pepe'
-    persona.instance_variable_get(:@nombre).should == nil
+    perro.nombre = 'Pepe'
+    perro.nombre.should == 'Pepe'
+    perro.instance_variable_get(:@nombre).should == nil
 
-    otra_persona.nombre = 'Cacho'
-    otra_persona.nombre.should == 'Cacho'
-    otra_persona.instance_variable_get(:@nombre).should == 'Cacho'
+    otro_perro.nombre = 'Cacho'
+    otro_perro.nombre.should == 'Cacho'
+    otro_perro.instance_variable_get(:@nombre).should == 'Cacho'
 
   end
 
   it 'debe realizar el autocommit al ejecutar el set del atributo' do
 
-    persona = Persona.new
+    perro = Mascota.new
 
-    advice = AdviceTransaccion.new(persona)
+    advice = AdviceTransaccion.new(perro)
     advice.autocommit = true
     advice.modificar_objecto
 
-    persona.nombre = 'Pepe'
-    persona.rollback
-    persona.nombre.should == 'Pepe'
-    persona.instance_variable_get(:@nombre).should == 'Pepe'
+    perro.nombre = 'Pepe'
+    perro.rollback
+    perro.nombre.should == 'Pepe'
+    perro.instance_variable_get(:@nombre).should == 'Pepe'
 
   end
 
   it 'debe realizar el autorollback al ejecutar el set del atributo y salga por error' do
 
-    persona = Persona.new
-    persona.nombre = 'Jorge'
+    perro = Mascota.new
+    perro.nombre = 'Jorge'
 
-    advice = AdviceTransaccion.new(persona)
+    advice = AdviceTransaccion.new(perro)
 
     advice.autocommit = true
     advice.modificar_objecto
 
     sym = '____nombre=____'
     proc = Proc.new { |a| raise 'errror' }
-    persona.define_singleton_method sym, proc
+    perro.define_singleton_method sym, proc
 
-    persona.nombre = 'Pepe'
-    persona.commit
-    persona.nombre.should == 'Jorge'
+    perro.nombre = 'Pepe'
+    perro.commit
+    perro.nombre.should == 'Jorge'
 
   end
 
