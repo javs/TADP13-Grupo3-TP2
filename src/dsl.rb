@@ -76,6 +76,14 @@ class Aspecto
 
   end
 
+  def opcional
+    :opt
+  end
+
+  def requerido
+    :req
+  end
+
   def aridad(cantidad)
     JoinPointAridadMetodo.new(cantidad)
   end
