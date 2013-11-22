@@ -1,5 +1,6 @@
 require_relative '../src/motor_de_aspectos'
 require_relative '../src/transacciones'
+require_relative '../src/cache'
 
 class Aspecto
 
@@ -82,6 +83,22 @@ class Aspecto
 
   def requerido
     :req
+  end
+
+  alias_method :cachear, :ejecutar
+
+  def usando(objeto)
+    StatefulCache.advice
+  end
+
+  def sin(objeto)
+    StatelessCache.advice
+  end
+
+  def usar(objeto)
+  end
+
+  def estado
   end
 
   def aridad(cantidad)

@@ -1,6 +1,6 @@
 class Persona
 
-  attr_accessor :nombre, :apelido
+  attr_accessor :nombre, :apelido, :edad
 
   def self.de_clase
     puts 'Este es un metodo de clase definido en Persona'
