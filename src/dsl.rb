@@ -92,80 +92,18 @@ class Aspecto
     AdviceTransaccion.new(objeto).modificar_objecto
   end
 
-  def nombre(objeto)
+  def pasamanos(objeto)
     objeto
   end
 
-  def con(objeto)
-    objeto
+  def self.crear_pasamanos(*args)
+    args.each { | nombre_pasamanos | alias_method nombre_pasamanos, :pasamanos }
   end
 
-  def de(objeto)
-    objeto
-  end
+  crear_pasamanos :hacer, :es, :pertenece, :coincide, :matchea
+  crear_pasamanos :nombre, :original, :tipo, :caso, :objeto
+  crear_pasamanos :en, :a, :de, :con, :entonces
+  crear_pasamanos :el, :la, :al, :del
 
-  def matchea(objeto)
-    objeto
-  end
 
-  def tipo(objeto)
-    objeto
-  end
-
-  def coincide(objeto)
-    objeto
-  end
-
-  def el(objeto)
-    objeto
-  end
-
-  def la(objeto)
-    objeto
-  end
-
-  def del(objeto)
-    objeto
-  end
-
-  def entonces(objeto)
-    objeto
-  end
-
-  def original(objeto)
-    objeto
-  end
-
-  def en(objeto)
-    objeto
-  end
-
-  def caso(objeto)
-    objeto
-  end
-
-  def pertenece(objeto)
-    objeto
-  end
-
-  def a(objeto)
-    objeto
-  end
-
-  def es(objeto)
-    objeto
-  end
-
-  def hacer(objeto)
-    objeto
-  end
-
-  def al(objeto)
-    objeto
-  end
-
-  def objeto(objeto)
-    objeto
-  end
-
-  end
+end
