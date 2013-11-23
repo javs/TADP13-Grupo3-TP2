@@ -1,7 +1,7 @@
 require_relative '../src/dsl'
 require_relative 'fixture'
 
-describe Aspecto do
+describe 'DSL para la aridad de los metodos' do
 
   after(:each) do
     Class.olvidar_aspectos_conocidos

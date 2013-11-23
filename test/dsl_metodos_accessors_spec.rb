@@ -18,7 +18,7 @@ describe 'DSL que describe los metodos accessors' do
     end
 
     Persona.new.nombre.should ==  'soy un metodo accessor'
-    Persona.new.apelido.should ==  'soy un metodo accessor'
+    Persona.new.apellido.should ==  'soy un metodo accessor'
 
   end
 

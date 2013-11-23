@@ -28,7 +28,8 @@ describe 'DSL para clases' do
 
   it 'debe aplicar el aspecto para clases especificas' do
     Aspecto.aplicar do
-      si coincide el nombre de la clase con Linyera
+      si coincide la clase con [Linyera,Persona]
+      o coincide la clase con OtraPersona
       entonces ejecutar en lugar del original el proc { 'conseguir trabajo' }
     end
 
@@ -37,5 +38,12 @@ describe 'DSL para clases' do
 
     persona_modificada = Linyera.new
     persona_modificada.vagar.should == 'conseguir trabajo'
+
+    persona_modificada = Persona.new
+    persona_modificada.hacer_algo.should == 'conseguir trabajo'
+
+    persona_modificada = OtraPersona.new
+    persona_modificada.hacer_algo.should == 'conseguir trabajo'
+
   end
 end

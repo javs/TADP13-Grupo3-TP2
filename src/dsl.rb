@@ -51,21 +51,27 @@ class Aspecto
   def clase(obj)
     if obj.class == Class
       JoinPointClasesEspecificas.new obj
+    elsif obj.class == Array
+      raise 'el array no contiene todas clases' unless obj.all? { |o| o.class == Class }
+      JoinPointClasesEspecificas.new *obj
     else
       JoinPointNombreClase.new obj
     end
   end
 
+  def metodo(obj)
+    if obj.class == UnboundMethod or obj.class == Method
+      JoinPointMetodosEspecificos.new obj
+    elsif obj.class == Array
+      raise 'el array no contiene todos metodos' unless obj.all? { |o| o.class == UnboundMethod or o.class == Method }
+      JoinPointMetodosEspecificos.new *obj
+    else
+      JoinPointNombreMetodo.new obj
+    end
+  end
+
   def accessor(obj)
     JoinPointMetodosAccessors.new obj
-  end
-
-  def metodo(regex)
-    JoinPointNombreMetodo.new(regex)
-  end
-
-  def metodos(metodos)
-    JoinPointMetodosEspecificos.new(*metodos)
   end
 
   def jerarquia(clase)
