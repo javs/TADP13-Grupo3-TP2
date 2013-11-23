@@ -16,8 +16,8 @@ describe 'DSL que describe los metodos especificos' do
       entonces ejecutar reemplazando el original con el proc { 'soy metodo hacer algo o hacer nombre' }
     end
 
-    Persona.new.nombre.should ==  'soy metodo hacer algo o hacer algo'
-    Persona.new.hacer_algo.should ==  'soy metodo hacer algo o hacer algo'
+    Persona.new.nombre.should ==  'soy metodo hacer algo o hacer nombre'
+    Persona.new.hacer_algo.should ==  'soy metodo hacer algo o hacer nombre'
 
   end
 
@@ -25,10 +25,10 @@ describe 'DSL que describe los metodos especificos' do
 
     Aspecto.aplicar do
       si coincide el nombre de los metodos con [Persona.instance_method(:hacer_algo),Persona.instance_method(:nombre)]
-      entonces ejecutar reemplazando el original con el proc { 'soy metodo hacer algo o hacer algo' }
+      entonces ejecutar reemplazando el original con el proc { 'soy metodo hacer algo o hacer nombre' }
     end
 
-    Persona.new.nombre.should_not ==  'soy metodo hacer algo o hacer nombre'
+    Persona.new.apelido.should_not ==  'soy metodo hacer algo o hacer nombre'
 
   end
 

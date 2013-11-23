@@ -1,7 +1,7 @@
 require_relative '../src/dsl'
 require_relative 'fixture'
 
-describe JoinPointMetodosAccessors do
+describe 'DSL que describe los metodos accessors' do
 
   after(:each) do
     Class.olvidar_aspectos_conocidos
