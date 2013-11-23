@@ -64,6 +64,10 @@ class Aspecto
     JoinPointNombreMetodo.new(regex)
   end
 
+  def metodos(metodos)
+    JoinPointMetodosEspecificos.new(*metodos)
+  end
+
   def jerarquia(clase)
     JoinPointJerarquiaDeClase.new(clase)
   end
@@ -120,7 +124,7 @@ class Aspecto
   crear_pasamanos :hacer, :es, :pertenece, :coincide, :matchea
   crear_pasamanos :nombre, :original, :tipo, :caso, :objeto
   crear_pasamanos :en, :a, :de, :un, :con, :entonces
-  crear_pasamanos :el, :la, :al, :del
+  crear_pasamanos :el, :la, :al, :del, :los
 
 
 end
